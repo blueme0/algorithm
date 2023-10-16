@@ -6,8 +6,15 @@ fun main() {
 
     var h: Long = 0
     for (i in 0 until num.length) {
-        h += (num[i].code - 96) * Math.pow(31.0, i.toDouble()).toLong() % M
-        h %= M
+        var now: Long = 1
+        for (j in 1 ..i) {
+            now *= 31
+            if (now > M) now %= M
+        }
+        h += (num[i].code - 96).toLong() * now
+        if (h > M) {
+            h %= M
+        }
     }
 
     print(h)

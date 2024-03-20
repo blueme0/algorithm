@@ -1,54 +1,67 @@
+import java.io.BufferedReader
+import java.io.BufferedWriter
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
 import java.util.*
 
-var graph = arrayOf<IntArray>()
 var visited = booleanArrayOf()
+var graph = arrayOf(ArrayList<Int>())
+var bw = BufferedWriter(OutputStreamWriter(System.out))
 
 fun main() {
-    val br = System.`in`.bufferedReader()
-    val (n, m, v) = br.readLine().split(" ").map { it.toInt() }
-    graph = Array(n) { IntArray(n) }
-    visited = BooleanArray(n)
+    val br = BufferedReader(InputStreamReader(System.`in`))
+    var st = StringTokenizer(br.readLine())
 
-    repeat(m) {
-        val (x, y) = br.readLine().split(" ").map { it.toInt() }
-        graph[x - 1][y - 1] = 1
-        graph[y - 1][x - 1] = 1
+    val N = st.nextToken().toInt()
+    val M = st.nextToken().toInt()
+    val V = st.nextToken().toInt()
+
+    graph = Array(N + 1) { ArrayList<Int>() }
+
+    repeat(M) {
+        st = StringTokenizer(br.readLine())
+        val v = st.nextToken().toInt()
+        val u = st.nextToken().toInt()
+
+        graph[v].add(u)
+        graph[u].add(v)
     }
 
-    visited.fill(false)
-    println(dfs(n, v-1).trimEnd())
+    for (i in 1 .. N) {
+        graph[i].sort()
+    }
 
-    visited.fill(false)
-    println(bfs(n, v-1).trimEnd())
+    visited = BooleanArray(N + 1) { false }
+    DFS(V)
+    bw.write("\n")
+    bw.flush()
+
+    visited = BooleanArray(N + 1) { false }
+    BFS(V)
+    bw.flush()
+    bw.close()
 }
 
-private fun dfs(n: Int, v: Int): String {
-    val sb = StringBuilder()
+fun DFS(v: Int) {
+    bw.write("$v ")
     visited[v] = true
-    sb.append("${v+1} ")
-
-    for (i in 0 until n) if (graph[v][i] == 1 && !visited[i]) sb.append(dfs(n, i))
-
-    return sb.toString()
+    for (i in graph[v]) {
+        if (!visited[i]) DFS(i)
+    }
 }
 
-private fun bfs(n: Int, v: Int): String {
-    val sb = StringBuilder()
-    val list = LinkedList<Int>()
-
-    list.add(v); visited[v] = true
-    sb.append("${v+1} ")
-
-    while (list.isNotEmpty()) {
-        val cur = list.poll()
-
-        for (i in 0 until n) {
-            if (graph[cur][i] == 1 && !visited[i]) {
-                list.add(i); visited[i] = true
-                sb.append("${i+1} ")
+fun BFS(v: Int) {
+    val queue: Queue<Int> = LinkedList<Int>()
+    queue.add(v)
+    visited[v] = true
+    while (queue.isNotEmpty()) {
+        val cur = queue.poll()
+        bw.write("$cur ")
+        for (i in graph[cur]) {
+            if (!visited[i]) {
+                visited[i] = true
+                queue.add(i)
             }
         }
     }
-
-    return sb.toString()
 }

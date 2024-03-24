@@ -1,19 +1,26 @@
+import java.io.BufferedReader
+import java.io.BufferedWriter
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.util.*
+
 fun main() {
-    val br = System.`in`.bufferedReader()
-    val N = br.readLine().toInt()
-    val stack = mutableListOf<Int>()
-
-    val aim = (N downTo 1).toMutableList()
-
+    val br = BufferedReader(InputStreamReader(System.`in`))
     val sb = StringBuilder()
 
-    for (i in 1..N) {
-        val now = br.readLine().toInt()
-        while (aim.isNotEmpty() && aim.last() <= now) {
-            stack.add(aim.removeLast())
+    val n = br.readLine().toInt()
+    val stack = mutableListOf<Int>()
+
+    var num = 1
+
+    for (i in 1..n) {
+        val cur = br.readLine().toInt()
+        while (num <= n && num <= cur) {
+            stack.add(num)
+            num++
             sb.appendLine("+")
         }
-        if (stack.last() == now) {
+        if (stack.last() == cur) {
             stack.removeLast()
             sb.appendLine("-")
         }
@@ -23,5 +30,6 @@ fun main() {
             break
         }
     }
+
     print(sb.toString())
 }

@@ -1,30 +1,36 @@
+import java.io.BufferedReader
+import java.io.BufferedWriter
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
 import java.util.*
-import kotlin.math.absoluteValue
+import kotlin.math.abs
 
 fun main() {
-    val br = System.`in`.bufferedReader()
+    val br = BufferedReader(InputStreamReader(System.`in`))
+    val bw = BufferedWriter(OutputStreamWriter(System.out))
+
     val N = br.readLine().toInt()
 
-    val comparator = object : Comparator<Int> {
-        override fun compare(o1: Int?, o2: Int?): Int {
-            if (o1!!.absoluteValue != o2!!.absoluteValue) return o1!!.absoluteValue - o2!!.absoluteValue
-            else return o1 - o2
+    val pq = PriorityQueue<AbsInt>()
+
+    repeat(N) {
+        val cur = br.readLine().toInt()
+        if (cur == 0) {
+            if (pq.isEmpty()) bw.write("0\n")
+            else bw.write("${pq.poll().int}\n")
+        } else {
+            pq.add(AbsInt(cur))
         }
     }
 
-    val pq = PriorityQueue<Int>(comparator)
-    for (i in 0 until N) {
-        val num = br.readLine().toInt()
-        if (num == 0) {
-            if (pq.isEmpty()) {
-                println(0)
-            }
-            else {
-                println(pq.poll())
-            }
-        }
-        else {
-            pq.offer(num)
-        }
+    bw.flush()
+    bw.close()
+}
+
+data class AbsInt(val int: Int) : Comparable<AbsInt> {
+    override fun compareTo(other: AbsInt): Int {
+        return if (abs(int) == abs(other.int)) {
+            int - other.int
+        } else abs(int) - abs(other.int)
     }
 }

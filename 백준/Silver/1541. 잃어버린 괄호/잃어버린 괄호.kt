@@ -3,16 +3,24 @@ import java.io.InputStreamReader
 
 fun main() {
     val br = BufferedReader(InputStreamReader(System.`in`))
-    val line_minus = br.readLine().split("-")
+    var isFirst = true
+
     var result = 0
-    for (i in line_minus.indices) {
-        val sum = line_minus[i].split("+").map { it.toInt() }.sum()
-        if (i == 0) {
-            result += sum
+
+    val minus = br.readLine().split("-")
+    for (l in minus) {
+        val plus = l.split("+").map { it.toInt() }
+        var temp = 0
+        for (n in plus) {
+            temp += n
         }
-        else {
-            result -= sum
+        if (isFirst) {
+            result = temp
+            isFirst = false
+        } else {
+            result -= temp
         }
     }
+
     print(result)
 }

@@ -1,17 +1,21 @@
+import java.io.BufferedReader
+import java.io.InputStreamReader
+
 fun main() {
-    val br = System.`in`.bufferedReader()
+    val br = BufferedReader(InputStreamReader(System.`in`))
     val (N, K) = br.readLine().split(" ").map { it.toInt() }
-    val coins = mutableListOf<Int>()
-    repeat(N) {
-        coins.add(br.readLine().toInt())
+    val arr = Array<Int>(N) { 0 }
+    for (i in N - 1 downTo 0) {
+        arr[i] = br.readLine().toInt()
     }
-    var count = 0
-    coins.sort()
+
     var rest = K
-    for (i in N-1 downTo 0) {
+    var count = 0
+    for (i in 0 until N) {
         if (rest == 0) break
-        count += rest / coins[i]
-        rest %= coins[i]
+        count += rest / arr[i]
+        rest %= arr[i]
     }
-    println(count)
+
+    print(count)
 }

@@ -27,21 +27,24 @@ fun main() {
     var weight = 0
     while (pq.isNotEmpty()) {
         val cur = pq.poll()
-        if (find(cur.v1) != find(cur.v2)) {
-            union(cur.v1, cur.v2)
+        val f1 = find(cur.v1)
+        val f2 = find(cur.v2)
+        if (f1 != f2) {
+            union(f1, f2)
             weight += cur.w
         }
+//        if (find(cur.v1) != find(cur.v2)) {
+//            union(cur.v1, cur.v2)
+//            weight += cur.w
+//        }
     }
 
     print(weight)
 }
 
 fun union(n1: Int, n2: Int) {
-    val p1 = find(n1)
-    val p2 = find(n2)
-
-    if (p1 < p2) parent[p2] = p1
-    else parent[p1] = p2
+    if (n1 < n2) parent[n2] = n1
+    else parent[n1] = n2
 }
 
 fun find(n: Int): Int {

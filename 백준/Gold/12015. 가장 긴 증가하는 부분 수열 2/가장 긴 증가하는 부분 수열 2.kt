@@ -2,38 +2,34 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 var N = 0
-val list = ArrayList<Int>()
+var arr = IntArray(0) { 0 }
 
 fun main() {
     val br = BufferedReader(InputStreamReader(System.`in`))
     N = br.readLine().toInt()
     val ai = br.readLine().split(" ").map { it.toInt() }
+    arr = IntArray(N) { 0 }
 
-    for (i in ai) {
-        if (list.isEmpty() || list.last() < i) {
-            list.add(i)
-            continue
-        }
-        val change = binarySearch(i)
-        list[change] = i
-    }
-    print(list.size)
-}
+    var len = 1
+    arr[0] = ai[0]
 
-fun binarySearch(num: Int): Int {
-    var left = 0
-    var right = list.size - 1
-
-    while (left < right) {
-        val mid = (left + right) / 2
-        val cur = list[mid];
-        if (num > cur) {
-            left = mid + 1
-        } else if (num < cur) {
-            right = mid
+    for (i in 1 until N) {
+        if (arr[len - 1] < ai[i]) {
+            arr[len] = ai[i]
+            len++
         } else {
-            return mid
+            var left = 0
+            var right = len - 1
+            while (left < right) {
+                val mid = (left + right) ushr 1
+                if (ai[i] > arr[mid]) {
+                    left = mid + 1
+                } else {
+                    right = mid
+                }
+            }
+            arr[right] = ai[i]
         }
     }
-    return right
+    print(len)
 }

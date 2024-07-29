@@ -2,6 +2,7 @@ import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
+import java.util.*
 import kotlin.math.max
 
 fun main() {
@@ -18,13 +19,13 @@ fun main() {
         }
     }
 
-    val stack = mutableListOf<Char>()
+    val sb = StringBuilder()
 
     var i = first.length
     var j = second.length
     while (lcs[i][j] > 0) {
         if (first[i - 1] == second[j - 1]) {
-            stack.add(first[i - 1])
+            sb.append(first[i - 1])
             i--
             j--
         } else {
@@ -33,11 +34,6 @@ fun main() {
         }
     }
 
-    val bw = BufferedWriter(OutputStreamWriter(System.out))
-    bw.appendLine("${stack.size}")
-    while (stack.isNotEmpty()) {
-        bw.append("${stack.removeLast()}")
-    }
-    bw.flush()
-    bw.close()
+    println(sb.length)
+    print(sb.toString().reversed())
 }

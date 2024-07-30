@@ -3,32 +3,27 @@ import java.io.InputStreamReader
 import java.util.*
 
 var n = 0
-var checked = BooleanArray(0) { false }
-var visited = BooleanArray(0) { false }
-var students = IntArray(0) { 0 }
+var finished = BooleanArray(100_001) { false }
+var visited = BooleanArray(100_001) { false }
+var students = IntArray(100_001) { 0 }
 var cnt = 0
 
 fun main() {
     val br = BufferedReader(InputStreamReader(System.`in`))
-    var st = StringTokenizer(br.readLine())
-    val T = st.nextToken().toInt()
+    val T = br.readLine().toInt()
     val sb = StringBuilder()
 
     repeat(T) {
-        st = StringTokenizer(br.readLine())
-        n = st.nextToken().toInt()
+        n = br.readLine().toInt()
         cnt = n
-        students = IntArray(n + 1) { 0 }
 
-        st = StringTokenizer(br.readLine())
-        for (i in 1..n) {
-            students[i] = st.nextToken().toInt()
-        }
-        visited = BooleanArray(n + 1) { false }
-        checked = BooleanArray(n + 1) { false }
+        val line = br.readLine()
+        line.split(" ").forEachIndexed { index, s -> students[index + 1] = s.toInt() }
+        visited.fill(false)
+        finished.fill(false)
 
         for (i in 1..n) {
-            if (!checked[i]) dfs(i)
+            if (!finished[i]) dfs(i)
         }
 
         sb.appendLine("$cnt")
@@ -44,7 +39,7 @@ fun dfs(cur: Int) {
     if (!visited[next]) {
         dfs(next)
     } else {
-        if (!checked[next]) {
+        if (!finished[next]) {
             cnt--
 
             while (cur != next) {
@@ -54,5 +49,5 @@ fun dfs(cur: Int) {
         }
     }
 
-    checked[cur] = true
+    finished[cur] = true
 }

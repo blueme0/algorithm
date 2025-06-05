@@ -13,35 +13,12 @@ fun main() {
     val stack = ArrayList<Pair<Int, Int>>() // Pair(high, idx)
     for (i in 0 until N) {
         val high = st.nextToken().toInt()
-        /**
-         * 탑 체크.
-         */
-
-        var receive = 0
-        for (j in stack.size - 1 downTo 0) {
-            if (stack[j].first > high) {
-                receive = stack[j].second + 1
-                break
-            }
-        }
-        bw.write("$receive ")
-
         while (stack.isNotEmpty() && stack.last().first <= high) {
             stack.removeLast()
         }
+        if (stack.isEmpty()) bw.write("0 ")
+        else bw.write("${stack.last().second + 1} ")
         stack.add(Pair(high, i))
-
-
-        /**
-         * 6
-         *
-         * 6, 9 -> 9, 9로 판단.....
-         *
-         * 9, 9, 5,
-         *
-         * 9, 9, 5, 7 -> 9, 9, 7, 7이 되
-         *
-         */
     }
     bw.flush()
     bw.close()

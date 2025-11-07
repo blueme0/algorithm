@@ -1,33 +1,49 @@
-import java.lang.StringBuilder
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.util.*
 
 fun main() {
-    val br = System.`in`.bufferedReader()
-    val M = br.readLine().toInt()
+    val br = BufferedReader(InputStreamReader(System.`in`))
+    var st = StringTokenizer(br.readLine())
+    val M = st.nextToken().toInt()
 
-    var S = mutableSetOf<Int>()
     val sb = StringBuilder()
-    repeat(M) {
-        val cmd = br.readLine().split(" ")
-        when (cmd[0]) {
+
+    var all = 0
+    for (i in 0..19) {
+        all = all or (1 shl i)
+    }
+    var S = 0
+
+    for(i in 1..M) {
+        st = StringTokenizer(br.readLine())
+        val cmd = st.nextToken()
+        if (cmd == "all") {
+            S = all
+            continue
+        }
+        if (cmd == "empty") {
+            S = 0
+            continue
+        }
+        val num = st.nextToken().toInt() - 1
+
+        when (cmd) {
             "add" -> {
-                if (!S.contains(cmd[1].toInt())) S.add(cmd[1].toInt())
+                S = S or (1 shl num)
             }
+
             "remove" -> {
-                if (S.contains(cmd[1].toInt())) S.remove(cmd[1].toInt())
+                S = S and (1 shl num).inv()
             }
+
             "check" -> {
-                if (S.contains(cmd[1].toInt())) sb.appendLine(1)
-                else sb.appendLine(0)
+                if (S and (1 shl num) != 0) sb.appendLine("1")
+                else sb.appendLine("0")
             }
+
             "toggle" -> {
-                if (S.contains(cmd[1].toInt())) S.remove(cmd[1].toInt())
-                else S.add(cmd[1].toInt())
-            }
-            "all" -> {
-                S = (1..20).toMutableSet()
-            }
-            "empty" -> {
-                S = mutableSetOf()
+                S = S xor (1 shl num)
             }
         }
     }
